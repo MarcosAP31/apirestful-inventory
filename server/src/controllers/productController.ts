@@ -46,6 +46,14 @@ class ProductController {
         await pool.query('DELETE FROM product WHERE Code = ?', [id]);
         res.json({ message: "The produt was deleted" });
     }
+    public async incomes(req:Request,res:Response):Promise<void>{
+        const operations = await pool.query('SELECT output.Date AS outputDate,product.Code,product.Description,output.Amount AS outputAmount FROM product JOIN output ON output.Code=product.Code ORDER BY output.Date DESC');
+        res.json(operations);
+    }
+    public async expenses(req:Request,res:Response):Promise<void>{
+        const operations = await pool.query('SELECT entry.Date AS entryDate,product.Code,product.Description,entry.Amount AS entryAmount FROM product JOIN entry ON entry.Code=product.Code ORDER BY entry.Date DESC');
+        res.json(operations);
+    }
     
 }
 

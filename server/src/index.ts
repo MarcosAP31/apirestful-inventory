@@ -11,6 +11,7 @@ import saleRoutes from './routes/saleRoutes';
 import salexproductRoutes from './routes/salexproductRoutes';
 import supplierRoutes from './routes/supplierRoutes';
 import userRoutes from './routes/userRoutes';
+import operationRoutes from './routes/operationRoutes';
 import messageRoutes from './routes/messageRoutes';
 const jwt=require("jsonwebtoken");
 class Server {
@@ -57,6 +58,7 @@ class Server {
         this.app.use('/apistore/sale', saleRoutes);
         this.app.use('/apistore/salexproduct', salexproductRoutes);
         this.app.use('/apistore/supplier', supplierRoutes);
+        this.app.use('/apistore/operation',operationRoutes)
         this.app.use('/apistore/user', userRoutes);
         
         this.app.post('/apistore/user/verify',this.verifyToken,(req:any,res:any)=>{
