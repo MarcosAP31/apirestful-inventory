@@ -21,6 +21,16 @@ class SupplierController {
         res.status(404).json({ text: "The supplier doesn't exits" });
     }
 
+    public async getByBusinessName(req: Request, res: Response): Promise<any> {
+        const { businessName} = req.params;
+        const supplier = await pool.query(' SELECT * FROM supplier WHERE BusinessName = ?', [businessName]);
+        console.log(supplier.length);
+        if (supplier.length > 0) {
+            return res.json(supplier[0]);
+        }
+        res.status(404).json({ text: "The supplier doesn't exits" });
+    }
+
     public async create(req: Request, res: Response): Promise<void> {
         const result = await pool.query('INSERT INTO supplier set ?', [req.body]);
         res.json({ message: 'Supplier Saved' });

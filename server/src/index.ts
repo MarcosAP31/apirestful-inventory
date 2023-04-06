@@ -2,6 +2,13 @@ import express, { Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 
+import bodyParser from 'body-parser';
+import multer from 'multer';
+
+import mysqlConnection from './database';
+import path from 'path';
+import fs from 'fs';
+//const fs = require('fs').promises;
 import indexRoutes from './routes/indexRoutes';
 import clientRoutes from './routes/clientRoutes';
 import entryRoutes from './routes/entryRoutes';
@@ -23,7 +30,7 @@ class Server {
         this.config();
         this.routes();
     }
-
+    
     config(): void {
         this.app.set('port', process.env.PORT || 3000);
 
@@ -74,6 +81,7 @@ class Server {
             })
         })
         this.app.use('/apistore/message',messageRoutes);
+        
     }
     
     start() {
