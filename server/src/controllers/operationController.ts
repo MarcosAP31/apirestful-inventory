@@ -7,7 +7,7 @@ var token=""
 class OperationController {
     
     public async list(req: Request, res: Response): Promise<void> {
-        const operations = await pool.query('SELECT operation.Date,operation.Description,product.SalePrice AS SalePrice,product.PurchasePrice AS PurchasePrice FROM operation JOIN product ON product.Code=operation.Code');
+        const operations = await pool.query('SELECT operation.OperationId,operation.Date,operation.Description,product.SalePrice AS salePrice,product.PurchasePrice AS purchasePrice FROM operation JOIN product ON product.Code=operation.Code');
         res.json(operations);
     }
 

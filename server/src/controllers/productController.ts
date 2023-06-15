@@ -29,6 +29,15 @@ class ProductController {
         }
         res.status(404).json({ text: "The product doesn't exits" });
     }
+    public async getByImage(req: Request, res: Response): Promise<any> {
+        const { image } = req.params;
+        const product = await pool.query('SELECT * FROM product WHERE Image = ?', [image]);
+        console.log(product.length);
+        if (product.length > 0) {
+            return res.json(product[0]);
+        }
+        res.status(404).json({ text: "The product doesn't exits" });
+    }
     public async create(req: Request, res: Response): Promise<void> {
         const result = await pool.query('INSERT INTO product set ?', [req.body]);
         res.json({ message: 'Product Saved' });

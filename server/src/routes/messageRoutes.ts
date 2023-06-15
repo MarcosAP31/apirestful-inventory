@@ -12,11 +12,12 @@ class MessageRoutes {
 
     config() {
         this.router.get('/', messageController.list);
+        this.router.get('/conversationid/:conversationid', messageController.getMessagesByConversationId);
+        this.router.get('/userid/:userid', messageController.getMessagesByUserId);
         this.router.post('/', messageController.create);
         this.router.put('/:id', messageController.update);
         this.router.delete('/:id', messageController.delete);
-        
-        
+
     }
 
 }
