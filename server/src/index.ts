@@ -172,6 +172,7 @@ class Server {
     );
     this.app.post(
       "/apistore/file",
+      uploadimg.single("file"),
       (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const file: any = req.file;
         const filesImg = {
@@ -190,11 +191,26 @@ class Server {
         pool.query("INSERT INTO file set ?", [filesImg]);
       }
     );
-    this.app.delete("/apistore/file/:id", (req: express.Request, res: express.Response) => {
+    this.app.delete("/apistore/deletefile/:id", (req: express.Request, res: express.Response) => {
+      const { id } = req.params;
+      deleteFile(id);
+    });
+    this.app.delete("/apistore/delete/:id", (req: express.Request, res: express.Response) => {
       const { id } = req.params;
       pool.query("DELETE FROM file WHERE FileId = ?", [id]);
       res.json({ message: "The file was deleted" });
     });
+    async function deleteFile(id: number) {
+      const files = await pool.query("SELECT * FROM  file WHERE FileId = ?", [id]);
+      const filePath = './'+files[0].Image;
+      fs.unlink(filePath, (err:any) => {
+        if (err) {
+          console.error('Error al eliminar el archivo:', err);
+          return;
+        }
+        console.log('Archivo eliminado exitosamente');
+      });
+  }
     // Configurar Socket.io
     this.io = socketIO();
 
