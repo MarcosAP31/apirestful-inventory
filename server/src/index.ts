@@ -129,7 +129,7 @@ class Server {
         callBack(null, file.originalname);
       },
     });
-    const upload = multer({ storage: storage });
+    const uploadimg = multer({ storage: storage });
     const uploaddoc = multer({ storage: storagedoc });
     this.app.get("/apistore/upload", (req: any, res: any) => {
       pool.query(
@@ -143,59 +143,53 @@ class Server {
         }
       );
     });
-
     this.app.post(
-      "/apistore/file",
-      upload.single("file"),
+      "/apistore/saveimg",
+      uploadimg.single("file"),
       (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const file: any = req.file;
-
-        const filesImg = {
-          FileId: null,
-          Name: file.filename,
-          Image: file.path,
-          Date: null,
-        };
 
         if (!file) {
           const error: any = new Error("No File");
           error.httpStatusCode = 400;
           return next(error);
         }
-
         res.send(file);
-        console.log(filesImg);
-
-        pool.query("INSERT INTO file set ?", [filesImg]);
       }
     );
-
     this.app.post(
-      "/apistore/filedoc",
+      "/apistore/savedoc",
       uploaddoc.single("file"),
       (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const file: any = req.file;
-
+        if (!file) {
+          const error: any = new Error("No File");
+          error.httpStatusCode = 400;
+          return next(error);
+        }
+        res.send(file);
+      }
+    );
+    this.app.post(
+      "/apistore/file",
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        const file: any = req.file;
         const filesImg = {
           FileId: null,
           Name: file.filename,
           Image: file.path,
           Date: null,
         };
-
         if (!file) {
           const error: any = new Error("No File");
           error.httpStatusCode = 400;
           return next(error);
         }
-
         res.send(file);
         console.log(filesImg);
-
         pool.query("INSERT INTO file set ?", [filesImg]);
       }
     );
-
     this.app.delete("/apistore/file/:id", (req: express.Request, res: express.Response) => {
       const { id } = req.params;
       pool.query("DELETE FROM file WHERE FileId = ?", [id]);
