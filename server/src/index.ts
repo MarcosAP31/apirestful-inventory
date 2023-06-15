@@ -198,24 +198,9 @@ class Server {
 
     this.app.delete("/apistore/file/:id", (req: express.Request, res: express.Response) => {
       const { id } = req.params;
-      deleteFile(id);
       pool.query("DELETE FROM file WHERE FileId = ?", [id]);
       res.json({ message: "The file was deleted" });
     });
-
-    async function deleteFile(id: number) {
-      const files = await pool.query("SELECT * FROM  file WHERE FileId = ?", [id]);
-      const filePath = './'+files[0].Image;
-      fs.unlink(filePath, (err:any) => {
-        if (err) {
-          console.error('Error al eliminar el archivo:', err);
-          return;
-        }
-        console.log('Archivo eliminado exitosamente');
-      });
-      
-
-    }
     // Configurar Socket.io
     this.io = socketIO();
 

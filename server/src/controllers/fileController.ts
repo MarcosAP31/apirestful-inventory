@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-
-
 import pool from '../database';
+const fs = require('fs');
 const jwt=require("jsonwebtoken");
 var token=""
 class FileController {
@@ -17,10 +16,17 @@ class FileController {
         }
         res.status(404).json({ text: "The client doesn't exits" });
     }
-
-    
-    
-   
+    public async deleteFile(id: number) {
+        const files = await pool.query("SELECT * FROM  file WHERE FileId = ?", [id]);
+        const filePath = './'+files[0].Image;
+        fs.unlink(filePath, (err:any) => {
+          if (err) {
+            console.error('Error al eliminar el archivo:', err);
+            return;
+          }
+          console.log('Archivo eliminado exitosamente');
+        });
+    }
 }
 
 
