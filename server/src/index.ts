@@ -129,7 +129,7 @@ class Server {
         callBack(null, file.originalname);
       },
     });
-    const uploadimg = multer({ storage: storage });
+    const upload = multer({ storage: storage });
     const uploaddoc = multer({ storage: storagedoc });
     this.app.get("/apistore/upload", (req: any, res: any) => {
       pool.query(
@@ -143,60 +143,62 @@ class Server {
         }
       );
     });
+
     this.app.post(
       "/apistore/saveimg",
-      uploadimg.single("file"),
+      upload.single("file"),
       (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const file: any = req.file;
 
-        if (!file) {
-          const error: any = new Error("No File");
-          error.httpStatusCode = 400;
-          return next(error);
-        }
-        res.send(file);
-      }
-    );
-    this.app.post(
-      "/apistore/savedoc",
-      uploaddoc.single("file"),
-      (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const file: any = req.file;
-        if (!file) {
-          const error: any = new Error("No File");
-          error.httpStatusCode = 400;
-          return next(error);
-        }
-        res.send(file);
-      }
-    );
-    this.app.post(
-      "/apistore/file",
-      uploadimg.single("file"),
-      (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const file: any = req.file;
         const filesImg = {
           FileId: null,
           Name: file.filename,
           Image: file.path,
           Date: null,
         };
+
         if (!file) {
           const error: any = new Error("No File");
           error.httpStatusCode = 400;
           return next(error);
         }
+
         res.send(file);
         console.log(filesImg);
+
         pool.query("INSERT INTO file set ?", [filesImg]);
       }
     );
-    this.app.delete("/apistore/deletefile/:id", (req: express.Request, res: express.Response) => {
+
+    this.app.post(
+      "/apistore/savedoc",
+      uploaddoc.single("file"),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        const file: any = req.file;
+
+        const filesImg = {
+          FileId: null,
+          Name: file.filename,
+          Image: file.path,
+          Date: null,
+        };
+
+        if (!file) {
+          const error: any = new Error("No File");
+          error.httpStatusCode = 400;
+          return next(error);
+        }
+
+        res.send(file);
+        console.log(filesImg);
+
+        pool.query("INSERT INTO file set ?", [filesImg]);
+      }
+    );
+
+    this.app.delete("/apistore/file/:id", (req: express.Request, res: express.Response) => {
       const { id } = req.params;
       deleteFile(id);
-    });
-    this.app.delete("/apistore/delete/:id", (req: express.Request, res: express.Response) => {
-      const { id } = req.params;
       pool.query("DELETE FROM file WHERE FileId = ?", [id]);
       res.json({ message: "The file was deleted" });
     });

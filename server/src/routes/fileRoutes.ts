@@ -12,9 +12,7 @@ class FileRoutes {
 
     config() {
         this.router.get('/name/:name', fileController.getByName);
-        this.router.delete('/:id', fileController.deleteFile);
     }
-
 }
 
 export default new FileRoutes().router;
