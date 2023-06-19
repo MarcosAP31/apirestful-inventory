@@ -24,10 +24,10 @@ import businessRoutes from './routes/businessRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import conversationRoutes from './routes/conversationRoutes';
 import documentRoutes from './routes/documentRoutes';
-
 const jwt = require("jsonwebtoken");
 const http = require('http');
 const socketIO = require('socket.io');
+
 
 class Server {
 
@@ -44,8 +44,15 @@ class Server {
     this.app.set('port', process.env.PORT || 3000);
 
     this.app.use(morgan('dev'));
-    this.app.use(cors());
+    //this.app.use(cors());
+    //this.app.use(cors({ origin: 'http://192.168.1.5:3000' }));
     this.app.use(express.json());
+    this.app.use((req:any, res:any, next:any) => {
+      res.setHeader('Access-Control-Allow-Origin', 'http://192.168.1.5:3000');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      next();
+    });
     this.app.use(express.urlencoded({ extended: false }));
 
   }
@@ -204,38 +211,17 @@ class Server {
     });
     async function deleteFile(id: number) {
       const files = await pool.query("SELECT * FROM  file WHERE FileId = ?", [id]);
-      const filePath = './'+files[0].Image;
-      fs.unlink(filePath, (err:any) => {
+      const filePath = './' + files[0].Image;
+      fs.unlink(filePath, (err: any) => {
         if (err) {
           console.error('Error al eliminar el archivo:', err);
           return;
         }
         console.log('Archivo eliminado exitosamente');
       });
-  }
-    // Configurar Socket.io
-    this.io = socketIO();
+    }
 
-    // Agregar el middleware de Socket.io al servidor de Express
-    this.app.io = this.io;
 
-    // Escuchar eventos de conexión de Socket.io
-    this.io.on('connection', (socket: any) => {
-      console.log('Nuevo cliente conectado');
-
-      // Escuchar evento "mensaje" del cliente
-      socket.on('mensaje', (data: any) => {
-        console.log('Mensaje recibido:', data);
-
-        // Enviar mensaje de vuelta al cliente
-        socket.emit('respuesta', '¡Hola cliente!');
-      });
-
-      // Manejar evento de desconexión del cliente
-      socket.on('disconnect', () => {
-        console.log('Cliente desconectado');
-      });
-    });
   }
 
 
@@ -243,6 +229,29 @@ class Server {
     const server = http.createServer(this.app);
     server.listen(this.app.get('port'), () => {
       console.log('Server on port', this.app.get('port'));
+      // Configurar Socket.io
+      this.io = socketIO(server);
+
+      // Agregar el middleware de Socket.io al servidor de Express
+      this.app.io = this.io;
+
+      // Escuchar eventos de conexión de Socket.io
+      this.io.on('connection', (socket: any) => {
+        console.log('Nuevo cliente conectado');
+
+        // Escuchar evento "mensaje" del cliente
+        socket.on('mensaje', (data: any) => {
+          console.log('Mensaje recibido:', data);
+
+          // Enviar mensaje de vuelta al cliente
+          socket.emit('respuesta', '¡Hola cliente!');
+        });
+
+        // Manejar evento de desconexión del cliente
+        socket.on('disconnect', () => {
+          console.log('Cliente desconectado');
+        });
+      });
     });
     /*
     this.app.listen(this.app.get('port'), () => {
