@@ -44,15 +44,10 @@ class Server {
     this.app.set('port', process.env.PORT || 3000);
 
     this.app.use(morgan('dev'));
-    //this.app.use(cors());
+    this.app.use(cors());
     //this.app.use(cors({ origin: 'http://192.168.1.5:3000' }));
     this.app.use(express.json());
-    this.app.use((req:any, res:any, next:any) => {
-      res.setHeader('Access-Control-Allow-Origin', 'http://192.168.1.5:3000');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-      next();
-    });
+    
     this.app.use(express.urlencoded({ extended: false }));
 
   }
