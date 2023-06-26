@@ -19,7 +19,15 @@ class MessageController {
         }
         res.status(404).json({ text: "The message doesn't exits" });
     }
-    
+    public async getUnreadMessagesByConversationId(req: Request, res: Response): Promise<any> {
+        const { conversationid } = req.params;
+        const messages = await pool.query('SELECT message.MessageId,message.Content,message.ShippingDate,user.UserName AS userName FROM message JOIN user ON user.UserId=message.UserId WHERE ConversationId = ? AND State="entregado"', [conversationid]);
+        console.log(messages.length);
+        if (messages.length > 0) {
+            return res.json(messages);
+        }
+        res.status(404).json({ text: "The message doesn't exits" });
+    }
     public async getMessagesByUserId(req: Request, res: Response): Promise<any> {
         const { userid } = req.params;
         const message = await pool.query('SELECT * FROM message WHERE UserId = ? ORDER BY MessageId DESC LIMIT 1', [userid]);
