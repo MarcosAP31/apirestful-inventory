@@ -1,6 +1,5 @@
 import express, { Application } from 'express';
 import morgan from 'morgan';
-import cors from 'cors';
 
 import bodyParser from 'body-parser';
 import multer from 'multer';
@@ -8,6 +7,8 @@ import multer from 'multer';
 import pool from './database';
 import path from 'path';
 const fs = require('fs');
+import cors from 'cors';
+//import getMessagesByConversationId from './controllers/messageController';
 import indexRoutes from './routes/indexRoutes';
 import clientRoutes from './routes/clientRoutes';
 import entryRoutes from './routes/entryRoutes';
@@ -24,9 +25,10 @@ import businessRoutes from './routes/businessRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import conversationRoutes from './routes/conversationRoutes';
 import documentRoutes from './routes/documentRoutes';
+const WebSocket = require('ws');
 const jwt = require("jsonwebtoken");
 const http = require('http');
-const socketIO = require('socket.io');
+import { Server as SocketIOServer } from 'socket.io';
 
 
 class Server {
@@ -47,7 +49,7 @@ class Server {
     this.app.use(cors());
     //this.app.use(cors({ origin: 'http://192.168.1.5:3000' }));
     this.app.use(express.json());
-    
+
     this.app.use(express.urlencoded({ extended: false }));
 
   }
@@ -108,7 +110,7 @@ class Server {
     this.app.use('/apistore/session', sessionRoutes)
     this.app.use('/apistore/conversation', conversationRoutes)
     this.app.use('/apistore/document', documentRoutes)
-    this.app.use(cors({ origin: "*" }));
+    //this.app.use(cors({ origin: "*" }));
     this.app.use(bodyParser.json());
     this.app.use(morgan("dev"));
 
@@ -222,10 +224,34 @@ class Server {
 
   start() {
     const server = http.createServer(this.app);
+    // Crear servidor WebSocket
+    const wss = new WebSocket.Server({ server });
+
+    // Manejar eventos de conexión WebSocket
+    wss.on('connection', (ws: any) => {
+      console.log('Nueva conexión WebSocket');
+
+      // Manejar eventos de mensajes recibidos
+      ws.on('message', (message: any) => {
+        console.log('Mensaje recibido:', message.toString('utf8'));
+        // Enviar mensaje de vuelta al cliente
+        wss.clients.forEach((client:any) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send('¡Hola cliente!');
+          }
+        });
+        //ws.send('¡Hola cliente!');
+      });
+
+      // Manejar eventos de cierre de conexión
+      ws.on('close', () => {
+        console.log('Conexión WebSocket cerrada');
+      });
+    });
     server.listen(this.app.get('port'), () => {
       console.log('Server on port', this.app.get('port'));
-      // Configurar Socket.io
-      this.io = socketIO(server);
+      /*// Configurar Socket.io
+      this.io = new SocketIOServer(server, { path: '/socket.io/' });
 
       // Agregar el middleware de Socket.io al servidor de Express
       this.app.io = this.io;
@@ -246,7 +272,7 @@ class Server {
         socket.on('disconnect', () => {
           console.log('Cliente desconectado');
         });
-      });
+      });*/
     });
     /*
     this.app.listen(this.app.get('port'), () => {

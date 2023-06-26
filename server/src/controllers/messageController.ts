@@ -31,7 +31,17 @@ class MessageController {
         }
         
     }
-
+    public async getLastMessageByConversationId(req: Request, res: Response): Promise<any> {
+        const { conversationid } = req.params;
+        const message = await pool.query('SELECT * FROM message WHERE ConversationId = ? ORDER BY MessageId DESC LIMIT 1', [conversationid]);
+        console.log(message.length);
+        if (message.length > 0) {
+            return res.json(message[0]);
+        }else{
+            return res.json(null)
+        }
+        
+    }
     public async create(req: Request, res: Response): Promise<void> {
         const result = await pool.query('INSERT INTO message set ?', [req.body]);
         res.json({ message: 'Message Saved' });
