@@ -47,7 +47,7 @@ class Server {
 
     this.app.use(morgan('dev'));
     this.app.use(cors());
-    //this.app.use(cors({ origin: 'http://192.168.1.5:3000' }));
+
     this.app.use(express.json());
 
     this.app.use(express.urlencoded({ extended: false }));
