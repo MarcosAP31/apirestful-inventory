@@ -12,7 +12,7 @@ class UbicationController {
 
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
-        const ubication = await pool.query('SELECT * FROM ubication WHERE Code = ?', [id]);
+        const ubication = await pool.query('SELECT * FROM ubication WHERE UbicationId = ?', [id]);
         console.log(ubication.length);
         if (ubication.length > 0) {
             return res.json(ubication[0]);
@@ -28,13 +28,13 @@ class UbicationController {
     public async update(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
         //const oldUbication = req.body;
-        await pool.query('UPDATE ubication set ? WHERE Code = ?', [req.body, id]);
+        await pool.query('UPDATE ubication set ? WHERE UbicationId = ?', [req.body, id]);
         res.json({ message: "The ubication was Updated" });
     }
 
     public async delete(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        await pool.query('DELETE FROM ubication WHERE Code = ?', [id]);
+        await pool.query('DELETE FROM ubication WHERE UbicationId = ?', [id]);
         res.json({ message: "The ubication was deleted" });
     }
     

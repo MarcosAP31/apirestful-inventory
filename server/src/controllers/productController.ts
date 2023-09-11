@@ -7,13 +7,13 @@ var token=""
 class ProductController {
     
     public async list(req: Request, res: Response): Promise<void> {
-        const products = await pool.query('SELECT product.Code,product.Description,product.Category,product.Amount,product.PurchasePrice,product.SalePrice,supplier.BusinessName AS supplier,product.Image FROM product INNER JOIN supplier ON supplier.SupplierId=product.SupplierId');
+        const products = await pool.query('SELECT product.ProductId,product.Description,product.Category,product.Amount,product.PurchasePrice,product.SalePrice,supplier.BusinessName AS supplier,product.Image FROM product JOIN supplier ON supplier.SupplierId=product.SupplierId');
         res.json(products);
     }
 
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
-        const product = await pool.query('SELECT * FROM product WHERE Code = ?', [id]);
+        const product = await pool.query('SELECT * FROM product WHERE ProductId = ?', [id]);
         console.log(product.length);
         if (product.length > 0) {
             return res.json(product[0]);
@@ -46,21 +46,21 @@ class ProductController {
     public async update(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
         const oldProduct = req.body;
-        await pool.query('UPDATE product set ? WHERE Code = ?', [req.body, id]);
+        await pool.query('UPDATE product set ? WHERE ProductId = ?', [req.body, id]);
         res.json({ message: "The product was Updated" });
     }
 
     public async delete(req: Request, res: Response): Promise<void> {
         const { id } = req.params;
-        await pool.query('DELETE FROM product WHERE Code = ?', [id]);
+        await pool.query('DELETE FROM product WHERE ProductId = ?', [id]);
         res.json({ message: "The produt was deleted" });
     }
     public async incomes(req:Request,res:Response):Promise<void>{
-        const operations = await pool.query('SELECT output.Date AS outputDate,product.Code,product.Description,output.Amount AS outputAmount FROM product JOIN output ON output.Code=product.Code ORDER BY output.Date DESC');
+        const operations = await pool.query('SELECT output.Date AS outputDate,product.ProductId,product.Description,output.Amount AS outputAmount FROM product JOIN output ON output.ProductId=product.ProductId ORDER BY output.Date DESC');
         res.json(operations);
     }
     public async expenses(req:Request,res:Response):Promise<void>{
-        const operations = await pool.query('SELECT entry.Date AS entryDate,product.Code,product.Description,entry.Amount AS entryAmount FROM product JOIN entry ON entry.Code=product.Code ORDER BY entry.Date DESC');
+        const operations = await pool.query('SELECT entry.Date AS entryDate,product.ProductId,product.Description,entry.Amount AS entryAmount FROM product JOIN entry ON entry.ProductId=product.ProductId ORDER BY entry.Date DESC');
         res.json(operations);
     }
     

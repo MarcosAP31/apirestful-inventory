@@ -24,6 +24,10 @@ import fileRoutes from './routes/fileRoutes';
 import businessRoutes from './routes/businessRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import conversationRoutes from './routes/conversationRoutes';
+import ubicationRoutes from './routes/ubicationRoutes';
+import orderRoutes from './routes/orderRoutes';
+import orderxproductRoutes from './routes/orderxproductRoutes';
+import reportRoutes from './routes/reportRoutes';
 import documentRoutes from './routes/documentRoutes';
 const WebSocket = require('ws');
 const jwt = require("jsonwebtoken");
@@ -80,6 +84,10 @@ class Server {
     this.app.use('/apistore/supplier', supplierRoutes);
     this.app.use('/apistore/operation', operationRoutes)
     this.app.use('/apistore/user', userRoutes);
+    this.app.use('/apistore/ubication', ubicationRoutes);
+    this.app.use('/apistore/order', orderRoutes);
+    this.app.use('/apistore/orderxproduct', orderxproductRoutes);
+    this.app.use('/apistore/report', reportRoutes);
     this.app.post('/apistore/user/verifytoken', this.verifyToken, (req: any, res: any) => {
       jwt.verify(req.token, 'secretkey', (error: any, authData: any) => {
         if (error) {
