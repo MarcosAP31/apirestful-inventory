@@ -5,7 +5,7 @@ import pool from '../database';
 
 class OrderController {
     public async list(req: Request, res: Response): Promise<void> {
-        const order = await pool.query('SELECT o.OrderId,o.OrderDate,o.State,o.DeliveryDate,o.TotalPrice,o.UserId,client.Name AS clientName,client.LastName AS clientLastName FROM `order` AS o JOIN client ON client.ClientId=o.ClientId');
+        const order = await pool.query('SELECT o.OrderId,o.OrderDate,o.State,o.DeliveryDate,o.TotalPrice,user.UserName AS userName,client.Name AS clientName,client.LastName AS clientLastName FROM `order` AS o JOIN client ON client.ClientId=o.ClientId JOIN user ON user.UserId=o.UserId');
         res.json(order);
     }
     public async listOrderShipped(req: Request, res: Response): Promise<void> {
