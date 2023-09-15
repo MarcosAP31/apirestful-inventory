@@ -12,6 +12,7 @@ class OrderRoutes {
 
     config() {
         this.router.get('/', orderController.list);
+        this.router.get('/shipped/', orderController.listOrderShipped);
         this.router.get('/:id', orderController.getOne);
         this.router.post('/', orderController.create);
         this.router.put('/:id', orderController.update);

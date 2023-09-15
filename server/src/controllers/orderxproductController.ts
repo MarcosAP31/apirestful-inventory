@@ -7,10 +7,13 @@ var token=""
 class OrderXProductController {
     
     public async list(req: Request, res: Response): Promise<void> {
+        const orderxproducts = await pool.query('SELECT * FROM orderxproduct ');
+        res.json(orderxproducts);
+    }
+    public async listOrderShipped(req: Request, res: Response): Promise<void> {
         const orderxproducts = await pool.query('SELECT * FROM orderxproduct');
         res.json(orderxproducts);
     }
-
     public async getOne(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
         const orderxproduct = await pool.query('SELECT * FROM orderxproduct WHERE OrderXProductId = ?', [id]);
