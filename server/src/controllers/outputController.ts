@@ -7,7 +7,7 @@ var token=""
 class OutputController {
     
     public async list(req: Request, res: Response): Promise<void> {
-        const outputs = await pool.query('SELECT output.ProductId,product.Description AS product,output.Date,client.Name AS client,user.Name AS user,output.Amount,product.SalePrice AS salePrice,ubication.Name AS ubicationName FROM output JOIN product ON product.ProductId=output.ProductId JOIN user ON user.UserId=output.UserId JOIN client ON client.ClientId=output.ClientId');
+        const outputs = await pool.query('SELECT output.ProductId,product.Description AS product,output.Date,client.Name AS clientName,client.LastName AS clientLastName,user.UserName AS userName,output.Amount,product.SalePrice AS salePrice FROM output JOIN product ON product.ProductId=output.ProductId JOIN user ON user.UserId=output.UserId JOIN client ON client.ClientId=output.ClientId');
         res.json(outputs);
     }
     public async getOne(req: Request, res: Response): Promise<any> {
