@@ -6,8 +6,8 @@ import pool from '../database';
 var token=""
 class OperationController {
     
-    public async list(req: Request, res: Response): Promise<void> {
-        const operations = await pool.query('SELECT operation.OperationId,operation.Date,operation.Description,product.SalePrice AS salePrice,product.PurchasePrice AS purchasePrice,user.UserName AS userName FROM operation JOIN product ON product.ProductId=operation.ProductId JOIN user ON user.UserId=operation.UserId');
+    public async listOperations(req: Request, res: Response): Promise<void> {
+        const operations = await pool.query('SELECT operation.OperationId,operation.Date,operation.Description,product.SalePrice AS salePrice,product.PurchasePrice AS purchasePrice,user.UserName AS userName FROM operation JOIN product ON product.ProductId=operation.ProductId JOIN user ON user.UserId=operation.UserId WHERE operation.Description LIKE "%Compra%" OR operation.Description LIKE "%Venta%"');
         res.json(operations);
     }
     public async listMovements(req: Request, res: Response): Promise<void> {

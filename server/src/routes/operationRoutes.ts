@@ -10,7 +10,7 @@ class OperationRoutes {
         this.config();
     }
     config() {
-        this.router.get('/', operationController.list);
+        this.router.get('/', operationController.listOperations);
         this.router.get('/movement/', operationController.listMovements);
         this.router.get('/productid/:productid', operationController.getLastOperationsByProductId);
         this.router.post('/', operationController.create);
