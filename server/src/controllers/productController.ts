@@ -26,8 +26,10 @@ class ProductController {
         console.log(product.length);
         if (product.length > 0) {
             return res.json(product[0]);
+        }else{
+            return res.json(null);
         }
-        res.status(404).json({ text: "The product doesn't exits" });
+        //res.status(404).json({ text: "The product doesn't exits" });
     }
     public async getByImage(req: Request, res: Response): Promise<any> {
         const { image } = req.params;

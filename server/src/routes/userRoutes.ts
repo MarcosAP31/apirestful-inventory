@@ -17,9 +17,8 @@ class UserRoutes {
         this.router.put('/:id', userController.update);
         this.router.delete('/:id', userController.delete);
         this.router.get('/email/:email',userController.getByEmail);
+        this.router.get('/username/:username',userController.getByUserName);
         this.router.post('/login',userController.login)
-      
-        
     }
 
 }

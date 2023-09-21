@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 
 
 import pool from '../database';
@@ -20,7 +20,19 @@ class ClientController {
         }
         res.status(404).json({ text: "The client doesn't exits" });
     }
-
+    public async getByEmail(req: Request, res: Response): Promise<any> {
+        const { email } = req.params;
+        const user:any = await pool.query('SELECT * FROM client WHERE Email = ?', [email]);
+        console.log(user.length);
+        if (user.length > 0) {
+            
+            return res.json(user[0]);
+        }else{
+            return res.json(null);
+        }
+        
+        res.status(404).json({ text: "The user doesn't exits" });
+    }
     public async create(req: Request, res: Response): Promise<void> {
         const result = await pool.query('INSERT INTO client set ?', [req.body]);
         res.json({ message: 'Client Saved' });

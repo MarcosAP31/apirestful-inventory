@@ -13,6 +13,7 @@ class ClientRoutes {
     config() {
         this.router.get('/', clientController.list);
         this.router.get('/:id', clientController.getOne);
+        this.router.get('/email/:email',clientController.getByEmail);
         this.router.post('/', clientController.create);
         this.router.put('/:id', clientController.update);
         this.router.delete('/:id', clientController.delete);
