@@ -166,7 +166,7 @@ class Server {
           FileId: null,
           Name: file.filename,
           Image: file.path,
-          Date: null,
+          Date: new Date()
         };
 
         if (!file) {
