@@ -11,7 +11,7 @@ class OperationController {
         res.json(operations);
     }
     public async listMovements(req: Request, res: Response): Promise<void> {
-        const operations = await pool.query('SELECT operation.OperationId,operation.Date,operation.Description,product.SalePrice AS salePrice,product.PurchasePrice AS purchasePrice,user.UserName AS userName FROM operation JOIN product ON product.ProductId=operation.ProductId JOIN user ON user.UserId=operation.UserId WHERE operation.Description LIKE "%Se agregó%" OR operation.Description LIKE "%Se movió%"');
+        const operations = await pool.query('SELECT operation.OperationId,operation.Date,operation.Description,product.SalePrice AS salePrice,product.PurchasePrice AS purchasePrice,user.UserName AS userName FROM operation JOIN product ON product.ProductId=operation.ProductId JOIN user ON user.UserId=operation.UserId WHERE operation.Description LIKE "%Se agregó%" OR operation.Description LIKE "%Se movió%" OR operation.Description LIKE "%Se devolvió%"');
         res.json(operations);
     }
     public async getLastOperationsByProductId(req: Request, res: Response): Promise<void> {
