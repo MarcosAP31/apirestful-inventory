@@ -121,7 +121,6 @@ class Server {
     //this.app.use(cors({ origin: "*" }));
     this.app.use(bodyParser.json());
     this.app.use(morgan("dev"));
-
     // Ruta para guardar imagenes
     this.app.use("/build/uploads/img", express.static(path.join(__dirname, "uploads/img")));
     const storage = multer.diskStorage({
