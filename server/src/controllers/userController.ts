@@ -69,7 +69,7 @@ class UserController {
         console.log(user.length);
         if (user.length > 0 && user1.length>0) {
             if(user[0].Password==user1[0].Password){
-                jwt.sign({user},'secretkey', {expiresIn: '32s'}, ((err:any,token:any)=>{
+                jwt.sign({user},'secretkey',((err:any,token:any)=>{
                     res.json(
                         token
                     );

@@ -303,7 +303,7 @@ class Server {
       const bearerToken = bearerHeader.split(" ")[1];
       req.token = bearerToken
       req.token.expireToken
-      console.log(res.token)
+      console.log(req.token)
       console.log("Token expirado")
       return res.json(req.token.expireToken)
     } else {
