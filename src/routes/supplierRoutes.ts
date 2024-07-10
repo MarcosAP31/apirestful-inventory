@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import SupplierController from '../Controllers/supplierController';
+import SupplierController from '../Controllers/SupplierController';
 
 class SupplierRoutes {
 

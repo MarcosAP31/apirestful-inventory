@@ -16,7 +16,7 @@ import outputRoutes from './routes/outputRoutes';
 import productRoutes from './routes/productRoutes';
 import saleRoutes from './routes/saleRoutes';
 import salexproductRoutes from './routes/salexproductRoutes';
-import SupplierRoutes from './routes/supplierRoutes';
+import SupplierRoutes from './routes/SupplierRoutes';
 import userRoutes from './routes/userRoutes';
 import operationRoutes from './routes/operationRoutes';
 import messageRoutes from './routes/messageRoutes';
