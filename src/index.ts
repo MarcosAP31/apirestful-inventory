@@ -16,7 +16,7 @@ import outputRoutes from './routes/outputRoutes';
 import productRoutes from './routes/productRoutes';
 import saleRoutes from './routes/saleRoutes';
 import salexproductRoutes from './routes/salexproductRoutes';
-import supplierRoutes from './routes/supplierRoutes';
+import SupplierRoutes from './routes/supplierRoutes';
 import userRoutes from './routes/userRoutes';
 import operationRoutes from './routes/operationRoutes';
 import messageRoutes from './routes/messageRoutes';
@@ -81,7 +81,7 @@ class Server {
     this.app.use('/apistore/product', productRoutes);
     this.app.use('/apistore/sale', saleRoutes);
     this.app.use('/apistore/salexproduct', salexproductRoutes);
-    this.app.use('/apistore/supplier', supplierRoutes);
+    this.app.use('/apistore/supplier', SupplierRoutes);
     this.app.use('/apistore/operation', operationRoutes)
     this.app.use('/apistore/user', userRoutes);
     this.app.use('/apistore/ubication', ubicationRoutes);

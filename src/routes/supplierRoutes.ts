@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import supplierController from '../controllers/supplierController';
+import SupplierController from '../Controllers/supplierController';
 
 class SupplierRoutes {
 
@@ -11,12 +11,12 @@ class SupplierRoutes {
     }
 
     config() {
-        this.router.get('/', supplierController.list);
-        this.router.get('/:id', supplierController.getOne);
-        this.router.get('/businessname/:businessname',supplierController.getByBusinessName);
-        this.router.post('/', supplierController.create);
-        this.router.put('/:id', supplierController.update);
-        this.router.delete('/:id', supplierController.delete);
+        this.router.get('/', SupplierController.list);
+        this.router.get('/:id', SupplierController.getOne);
+        this.router.get('/businessname/:businessname',SupplierController.getByBusinessName);
+        this.router.post('/', SupplierController.create);
+        this.router.put('/:id', SupplierController.update);
+        this.router.delete('/:id', SupplierController.delete);
         
     }
 
